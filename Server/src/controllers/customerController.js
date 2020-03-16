@@ -10,10 +10,8 @@ module.exports = {
             if (err) {
                 res.status(500).send(err);
             }
-            //Check if customer already exists
-            if (data.idnumber == req.body.idnumber) {
-                res.status(400).send({ Error: 'Customer already exists.' });
-            } else {
+            //Customer doesn't exist yet.
+            if (data === null) {
                 let customer = new Customer({
                     name: req.body.name,
                     address: req.body.address,
