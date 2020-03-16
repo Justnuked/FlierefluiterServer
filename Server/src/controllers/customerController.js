@@ -31,6 +31,8 @@ module.exports = {
                             Customer: customer
                         });
                     }).catch(next);
+            } else {
+                res.status(400).send({ Error: 'Customer already exists.' });
             }
         }).catch(next);
     },
