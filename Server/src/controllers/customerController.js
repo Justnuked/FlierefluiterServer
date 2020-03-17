@@ -63,7 +63,11 @@ module.exports = {
             //Return fetched data
             //TODO: Maybe custom JSON object to show extra data like guests, rentedfacilities, etc.
             else {
-                res.status(200).send(data);
+                if (data === null) {
+                    res.status(400).send({ Error: "Customer not found." });
+                } else {
+                    res.status(200).send(data);
+                }
             }
         }).catch(next);
     },
