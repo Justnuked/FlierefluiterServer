@@ -28,7 +28,7 @@ module.exports = {
                     .then((result) => {
                         res.status(200).send({
                             Message: "Customer created succesfully.",
-                            Customer: customer
+                            Customer: result
                         });
                     }).catch(next);
             } else {
@@ -88,6 +88,9 @@ module.exports = {
                 dateofbirth: req.body.dateofbirth,
                 idnumber: req.body.idnumber,
                 idcardorpassport: req.body.idcardorpassport
+            },
+            {
+                new: true
             })
             .then((customer) => {
                 //Check if retrieved customer exists.

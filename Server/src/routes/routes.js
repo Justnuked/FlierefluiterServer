@@ -5,7 +5,7 @@ const routes = express.Router();
 const Customer = require('../controllers/customerController.js');
 const Guest = require('../controllers/guestController.js');
 // const Field = require('../controllers/fieldController.js');
-// const Reservation = require('../controllers/reservationController.js');
+const Reservation = require('../controllers/reservationController.js');
 // const Facility = require('../controllers/facilityController.js');
 // const SeasonPrice = require('../controllers/seasonpriceController.js');
 // const Bill = require('../controllers/billController.js');
@@ -33,11 +33,11 @@ routes.delete('/guest/:id', Guest.delete);
 // routes.delete('/field/:id', Field.delete);
 
 // //Reservation routes
-// routes.get('/reservation', Reservation.get);
-// routes.get('/reservation/:id', Reservation.getById);
-// routes.post('/reservation', Reservation.create);
-// routes.put('/reservation/:id', Reservation.update);
-// routes.delete('/reservation/:id', Reservation.delete);
+routes.get('/reservation', Reservation.get);
+routes.get('/reservation/:id', Reservation.getById);
+routes.post('/reservation', Reservation.create);
+routes.put('/reservation/:id', Reservation.update);
+routes.delete('/reservation/:id', Reservation.delete);
 
 // //Facility routes
 // routes.get('/facility', Facility.get);

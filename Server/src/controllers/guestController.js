@@ -20,7 +20,7 @@ module.exports = {
             .then((result) => {
                 res.status(200).send({
                     Message: "Guest created succesfully.",
-                    Guest: guest
+                    Guest: result
                 });
             }).catch(next);
     },
@@ -72,6 +72,9 @@ module.exports = {
                 zipcode: req.body.zipcode,
                 city: req.body.city,
                 country: req.body.country
+            },
+            {
+                new: true
             })
             .then((guest) => {
                 //Check if retrieved guest exists
