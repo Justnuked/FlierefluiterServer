@@ -3,7 +3,7 @@ const routes = express.Router();
 
 //define controllers here
 const Customer = require('../controllers/customerController.js');
-// const Guest = require('../controllers/guestController.js');
+const Guest = require('../controllers/guestController.js');
 // const Field = require('../controllers/fieldController.js');
 // const Reservation = require('../controllers/reservationController.js');
 // const Facility = require('../controllers/facilityController.js');
@@ -19,11 +19,11 @@ routes.put('/customer/:id', Customer.update);
 routes.delete('/customer/:id', Customer.delete);
 
 //Guest routes
-// routes.get('/guest', Guest.get);
-// routes.get('/guest/:id', Guest.getById);
-// routes.post('/guest', Guest.create);
-// routes.put('/guest/:id', Guest.update);
-// routes.delete('/guest/:id', Guest.delete);
+routes.get('/guest', Guest.get);
+routes.get('/guest/:id', Guest.getById);
+routes.post('/guest', Guest.create);
+routes.put('/guest/:id', Guest.update);
+routes.delete('/guest/:id', Guest.delete);
 
 // //Field routes
 // routes.get('/field', Field.get);
