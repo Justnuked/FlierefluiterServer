@@ -19,10 +19,12 @@ const CustomerSchema = new Schema({
         type: String
     },
     phone: {
-        type: String
+        type: String,
+        required: true
     },
     email: {
-        type: String
+        type: String,
+        required: true
     },
     dateofbirth: {
         type: Date
