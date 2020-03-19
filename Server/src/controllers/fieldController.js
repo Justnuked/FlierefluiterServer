@@ -14,7 +14,6 @@ module.exports = {
             //Customer doesn't exist yet.
             if (data === null)
             {
-                console.log(req.body.name + "body of req");
                 let field = new Field({
                     name: req.body.name,
                     type: req.body.type,
@@ -29,7 +28,6 @@ module.exports = {
                     priceperday: req.body.priceperday,
                     seasonprice: req.body.seasonprice
                 });
-                console.log(field);
                 field.save()
                     .then((result) => {
                         res.status(200).send({
