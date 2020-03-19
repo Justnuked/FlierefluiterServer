@@ -64,7 +64,6 @@ module.exports = {
     //Get field by name
     getById(req, res, next) {
         Field.findOne({ name: req.params.name }, function (err, data) {
-            console.log(data + "Getting otter");
             //If server error
             if (err)
             {
