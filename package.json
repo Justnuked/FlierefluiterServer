@@ -4,8 +4,13 @@
   "description": "Server voor camping de flierefluiter",
   "main": "index.js",
   "scripts": {
+<<<<<<< HEAD:Server/package.json
     "start": "node index.js",
     "test": "mocha --exit"
+=======
+    "test": "mocha --exit",
+    "start": "node index.js"
+>>>>>>> 06d53bdb092f3f52d6b053ade23c9c5608bc60f9:package.json
   },
   "repository": {
     "type": "git",
