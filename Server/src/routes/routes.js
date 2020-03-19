@@ -8,7 +8,7 @@ const Field = require('../controllers/fieldController.js');
 const Reservation = require('../controllers/reservationController.js');
 // const Facility = require('../controllers/facilityController.js');
 // const SeasonPrice = require('../controllers/seasonpriceController.js');
-// const Bill = require('../controllers/billController.js');
+const Bill = require('../controllers/billController.js');
 // const FacilitiesRented = require('../controllers/facilitiesrentedController.js');
 
 //Customer routes
@@ -53,12 +53,12 @@ routes.delete('/reservation/:id', Reservation.delete);
 // routes.put('/seasonprice/:id', SeasonPrice.update);
 // routes.delete('/seasonprice/:id', SeasonPrice.delete);
 
-// //Bill routes
-// routes.get('/bill', Bill.get);
-// routes.get('/bill/:id', Bill.getById);
-// routes.post('/bill', Bill.create);
-// routes.put('/bill/:id', Bill.update);
-// routes.delete('/bill/:id', Bill.delete);
+//Bill routes
+routes.get('/bill', Bill.get);
+routes.get('/bill/:id', Bill.getById);
+routes.post('/bill', Bill.create);
+routes.put('/bill/:id', Bill.update);
+routes.delete('/bill/:id', Bill.delete);
 
 // //FacilitiesRented routes
 // routes.get('/facilitiesrented', FacilitiesRented.get);
