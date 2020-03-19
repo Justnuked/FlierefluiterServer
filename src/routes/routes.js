@@ -7,7 +7,7 @@ const Guest = require('../controllers/guestController.js');
 const Field = require('../controllers/fieldController.js');
 const Reservation = require('../controllers/reservationController.js');
 const Facility = require('../controllers/facilityController.js');
-// const SeasonPrice = require('../controllers/seasonpriceController.js');
+const SeasonPrice = require('../controllers/seasonpriceController.js');
 const Bill = require('../controllers/billController.js');
 const FacilitiesRented = require('../controllers/facilitiesrentedController.js');
 
@@ -47,11 +47,11 @@ routes.put('/facility/:id', Facility.update);
 routes.delete('/facility/:id', Facility.delete);
 
 //SeasonPrice routes
-// routes.get('/seasonprice', SeasonPrice.get);
-// routes.get('/seasonprice/:id', SeasonPrice.getById);
-// routes.post('/seasonprice', SeasonPrice.create);
-// routes.put('/seasonprice/:id', SeasonPrice.update);
-// routes.delete('/seasonprice/:id', SeasonPrice.delete);
+routes.get('/seasonprice', SeasonPrice.get);
+routes.get('/seasonprice/:id', SeasonPrice.getById);
+routes.post('/seasonprice', SeasonPrice.create);
+routes.put('/seasonprice/:id', SeasonPrice.update);
+routes.delete('/seasonprice/:id', SeasonPrice.delete);
 
 //Bill routes
 routes.get('/bill', Bill.get);
