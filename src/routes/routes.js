@@ -9,7 +9,7 @@ const Reservation = require('../controllers/reservationController.js');
 const Facility = require('../controllers/facilityController.js');
 // const SeasonPrice = require('../controllers/seasonpriceController.js');
 const Bill = require('../controllers/billController.js');
-// const FacilitiesRented = require('../controllers/facilitiesrentedController.js');
+const FacilitiesRented = require('../controllers/facilitiesrentedController.js');
 
 //Customer routes
 routes.get('/customer', Customer.get);
@@ -32,21 +32,21 @@ routes.post('/field', Field.create);
 routes.put('/field/:name', Field.update);
 routes.delete('/field/:name', Field.delete);
 
-// //Reservation routes
+//Reservation routes
 routes.get('/reservation', Reservation.get);
 routes.get('/reservation/:id', Reservation.getById);
 routes.post('/reservation', Reservation.create);
 routes.put('/reservation/:id', Reservation.update);
 routes.delete('/reservation/:id', Reservation.delete);
 
-// //Facility routes
+//Facility routes
 routes.get('/facility', Facility.get);
 routes.get('/facility/:id', Facility.getById);
 routes.post('/facility', Facility.create);
 routes.put('/facility/:id', Facility.update);
 routes.delete('/facility/:id', Facility.delete);
 
-// //SeasonPrice routes
+//SeasonPrice routes
 // routes.get('/seasonprice', SeasonPrice.get);
 // routes.get('/seasonprice/:id', SeasonPrice.getById);
 // routes.post('/seasonprice', SeasonPrice.create);
@@ -60,11 +60,11 @@ routes.post('/bill', Bill.create);
 routes.put('/bill/:id', Bill.update);
 routes.delete('/bill/:id', Bill.delete);
 
-// //FacilitiesRented routes
-// routes.get('/facilitiesrented', FacilitiesRented.get);
-// routes.get('/facilitiesrented/:id', FacilitiesRented.getById);
-// routes.post('/facilitiesrented', FacilitiesRented.create);
-// routes.put('/facilitiesrented/:id', FacilitiesRented.update);
-//routes.delete('/facilitiesrented/:id', FacilitiesRented.delete);
+//FacilitiesRented routes
+routes.get('/facilitiesrented', FacilitiesRented.get);
+routes.get('/facilitiesrented/:id', FacilitiesRented.getById);
+routes.post('/facilitiesrented', FacilitiesRented.create);
+routes.put('/facilitiesrented/:id', FacilitiesRented.update);
+routes.delete('/facilitiesrented/:id', FacilitiesRented.delete);
 
 module.exports = routes;
