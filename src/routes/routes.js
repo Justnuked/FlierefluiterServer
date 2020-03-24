@@ -1,5 +1,8 @@
 const express = require('express');
 const routes = express.Router();
+const passport = require('passport');
+const utils = require('../config/utils');
+const ROLES = require('../config/roles').ROLES;
 
 //define controllers here
 const Customer = require('../controllers/customerController.js');
@@ -10,6 +13,7 @@ const Reservation = require('../controllers/reservationController.js');
 // const SeasonPrice = require('../controllers/seasonpriceController.js');
 // const Bill = require('../controllers/billController.js');
 // const FacilitiesRented = require('../controllers/facilitiesrentedController.js');
+const User = require('../controllers/usercontroller');
 
 //Customer routes
 routes.get('/customer', Customer.get);
@@ -19,7 +23,20 @@ routes.put('/customer/:id', Customer.update);
 routes.delete('/customer/:id', Customer.delete);
 
 //Guest routes
-routes.get('/guest', Guest.get);
+routes.get('/guest', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Customer))
+    {
+        return Guest.get(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
+
 routes.get('/guest/:id', Guest.getById);
 routes.post('/guest', Guest.create);
 routes.put('/guest/:id', Guest.update);
@@ -38,6 +55,13 @@ routes.get('/reservation/:id', Reservation.getById);
 routes.post('/reservation', Reservation.create);
 routes.put('/reservation/:id', Reservation.update);
 routes.delete('/reservation/:id', Reservation.delete);
+
+//user routes
+routes.delete('/user/:name', User.deleteUser);
+routes.post('/login', User.login);
+routes.post('/register', User.createCustomer);
+
+//auth routes
 
 // //Facility routes
 // routes.get('/facility', Facility.get);

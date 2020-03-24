@@ -3,18 +3,22 @@ const http = require('http');
 const routes = require('./src/routes/routes.js');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const passport = require('passport');
+require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use('*', function(req, res, next){
+require('./src/config/passport.js');
+
+app.use('*', function (req, res, next) {
 	res.contentType('application/json');
 	next();
 });
 
-app.use(bodyParser.urlencoded({'extended': 'true'}));
-app.use(bodyParser.json({limit: '100mb'}));
-app.use(bodyParser.json({type:'application/vnd.api+json'}));
+app.use(bodyParser.urlencoded({ 'extended': 'true' }));
+app.use(bodyParser.json({ limit: '100mb' }));
+app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
@@ -30,14 +34,16 @@ mongoose.connect('mongodb://localhost/flierefluiter');
 //	console.log('error', err);
 //});
 
-app.use('/api', routes);
 
-app.use('*', function(err, req, res, next) {
+app.use('/api', routes);
+app.use('/api/field', passport.authenticate('jwt', { session: false }), routes);
+
+app.use('*', function (err, req, res, next) {
 	console.log('Error: ' + err);
 	res.status(404).json({ error: err }).end();
 });
 
-app.listen(port, function() {
+app.listen(port, function () {
 	console.log('Server listens on port ' + port);
 });
 
