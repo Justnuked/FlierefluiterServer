@@ -20,10 +20,31 @@ module.exports = {
                         console.log(err);
                     } else
                     {
-                        console.log(user);
+                        console.log(user + 'user at signing');
                         jwt.sign({ username: user.username, role: user.role }, process.env.jwt, { expiresIn: "1d" }, function (err, token) {
                             res.status(200);
-                            return res.json({ token });
+
+                            var temp = -1;
+
+                            switch (user.role)
+                            {
+                                case 'admin':
+                                    temp = 0;
+                                    break;
+                                case 'manager':
+                                    temp = 1;
+                                    break;
+                                case 'groundskeeper':
+                                    temp = 2;
+                                    break;
+                                case 'reception':
+                                    temp = 3;
+                                    break;
+                                case 'customer':
+                                    temp = 4;
+                                    break;
+                            }
+                            return res.json({ JWT: token, role: temp });
                         })
                     }
                 });
