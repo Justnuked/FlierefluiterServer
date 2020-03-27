@@ -46,7 +46,8 @@ module.exports = {
         {
             customer: req.body.customerId,
             guests: req.body.guestIds,
-            mainperiod: req.body.mainperiod,
+            startdate: req.body.startdate,
+            enddate: req.body.enddate,
             areas: req.body.areas,
             facilitiesrented: req.body.facilitiesrented,
             state: req.body.state,
@@ -100,7 +101,8 @@ module.exports = {
             {
                 customer: req.body.customerId,
                 guests: req.body.guestIds,
-                mainperiod: req.body.mainperiod,
+                startdate: req.body.startdate,
+                enddate: req.body.enddate,
                 areas: req.body.areas,
                 facilitiesrented: req.body.facilitiesrented,
                 state: req.body.state,
