@@ -8,7 +8,8 @@ module.exports = {
         //TODO: Decide where to check for data duplication. Front end?
         let guest = new Guest({
             name: req.body.name,
-            period: req.body.period,
+            startdate: req.body.startdate,
+            enddate: req.body.enddate,
             dateofbirth: req.body.dateofbirth,
             address: req.body.address,
             zipcode: req.body.zipcode,
@@ -66,7 +67,8 @@ module.exports = {
             { _id: req.params.id },
             {
                 name: req.body.name,
-                period: req.body.period,
+                startdate: req.body.startdate,
+                enddate: req.body.enddate,
                 dateofbirth: req.body.dateofbirth,
                 address: req.body.address,
                 zipcode: req.body.zipcode,

@@ -6,8 +6,11 @@ const GuestSchema = new Schema({
         type: String,
         required: true
     },
-    period: {
-        type: Date,
+    startdate: {
+        type: Date
+    },
+    enddate: {
+        type: Date
     },
     dateofbirth: {
         type: Date
