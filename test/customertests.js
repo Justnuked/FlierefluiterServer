@@ -15,7 +15,7 @@ let customer = {
     email: 'testCustomer1@yahoo.net',
     dateofbirth: '02-14-1980',
     idnumber: '012345678',
-    idcardorpassport: 0
+    idcardorpassport: 'Passport'
 };
 
 describe('Customer CRUD functions', () => {

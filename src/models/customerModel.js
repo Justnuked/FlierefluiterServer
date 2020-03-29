@@ -33,7 +33,7 @@ const CustomerSchema = new Schema({
         type: String
     },
     idcardorpassport: {
-        type: Number
+        type: String
     }
 });
 
