@@ -44,8 +44,8 @@ module.exports = {
 
         let reservation = new Reservation(
         {
-            customer: req.body.customerId,
-            guests: req.body.guestIds,
+            customer: req.body.customer,
+            guests: req.body.guests,
             startdate: req.body.startdate,
             enddate: req.body.enddate,
             areas: req.body.areas,
@@ -99,8 +99,8 @@ module.exports = {
         Reservation.findByIdAndUpdate(
             { _id: req.params.id },
             {
-                customer: req.body.customerId,
-                guests: req.body.guestIds,
+                customer: req.body.customer,
+                guests: req.body.guests,
                 startdate: req.body.startdate,
                 enddate: req.body.enddate,
                 areas: req.body.areas,
