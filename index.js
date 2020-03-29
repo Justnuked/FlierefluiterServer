@@ -4,6 +4,7 @@ const routes = require('./src/routes/routes.js');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const passport = require('passport');
+const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
@@ -14,7 +15,7 @@ require('./src/config/passport.js');
 app.use('*', function (req, res, next) {
 	res.contentType('application/json');
 	res.header("Access-Control-Allow-Origin", "*");
-  	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 	next();
 });
 
@@ -28,6 +29,8 @@ mongoose.set('useNewUrlParser', true);
 mongoose.set('useCreateIndex', true);
 mongoose.set('useUnifiedTopology', true);
 mongoose.connect('mongodb://localhost/flierefluiter');
+
+app.use(cors());
 
 //In case we want to move over to mlab.
 //mongoose.connect('mongodb://*mlab-url-here*').then(() => {
