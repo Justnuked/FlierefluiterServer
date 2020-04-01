@@ -6,7 +6,7 @@ module.exports = {
     create(req, res, next) {
 
         let facilitiesRented = new FacilitiesRented({
-            facility: req.body.faciliyid,
+            facility: req.body.facility,
             startdate: req.body.startdate,
             enddate: req.body.enddate,
             totalprice: req.body.totalprice
@@ -54,7 +54,7 @@ module.exports = {
         FacilitiesRented.findByIdAndUpdate(
             { _id: req.params.id },
             {
-                facility: req.body.faciliyid,
+                facility: req.body.facility,
                 startdate: req.body.startdate,
                 enddate: req.body.enddate,
                 totalprice: req.body.totalprice
