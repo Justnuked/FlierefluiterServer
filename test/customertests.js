@@ -26,7 +26,7 @@ describe('Customer CRUD functions', () => {
         customer.name = null;
         chai.request(server)
             .post('/api/customer')
-            .set('content-type', 'application/x-www-form-urlencoded')
+            .set('content-type', 'application/json')
             .send(customer)
             .end((err, res) => {
                 should.exist(res.body);
@@ -42,7 +42,7 @@ describe('Customer CRUD functions', () => {
         customer.name = "testCustomer";
         chai.request(server)
             .post('/api/customer')
-            .set('content-type', 'application/x-www-form-urlencoded')
+            .set('content-type', 'application/json')
             .send(customer)
             .end((err, res) => {
                 should.exist(res.body);
@@ -62,7 +62,7 @@ describe('Customer CRUD functions', () => {
         customer.name = "editedCustomer";
         chai.request(server)
             .put('/api/customer/' + customerId)
-            .set('content-type', 'application/x-www-form-urlencoded')
+            .set('content-type', 'application/json')
             .send(customer)
             .end((err, res) => {
                 should.exist(res.body);
@@ -77,7 +77,7 @@ describe('Customer CRUD functions', () => {
     it('should not try to edit a customer with an incorrect id', (done) => {
         chai.request(server)
             .put('/api/customer/000000000000000000000000')
-            .set('content-type', 'application/x-www-form-urlencoded')
+            .set('content-type', 'application/json')
             .send(customer)
             .end((err, res) => {
                 should.exist(res.body);
@@ -91,7 +91,7 @@ describe('Customer CRUD functions', () => {
     it('should not try to delete a customer with incorrect id', (done) => {
         chai.request(server)
             .delete('/api/customer/000000000000000000000000')
-            .set('content-type', 'application/x-www-form-urlencoded')
+            .set('content-type', 'application/json')
             .send({})
             .end((err, res) => {
                 should.exist(res.body);
@@ -105,7 +105,7 @@ describe('Customer CRUD functions', () => {
     it('should delete a customer', (done) => {
         chai.request(server)
             .delete('/api/customer/' + customerId)
-            .set('content-type', 'application/x-www-form-urlencoded')
+            .set('content-type', 'application/json')
             .end((err, res) => {
                 should.exist(res.body);
                 res.should.have.status(200);

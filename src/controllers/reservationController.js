@@ -56,7 +56,7 @@ module.exports = {
 
         reservation.save().then((result) => {
             res.status(200).send({
-                Message: "Reservation created succesfully.",
+                Message: "Reservation created successfully.",
                 Reservation: result
             });
         }).catch(next);
@@ -117,7 +117,7 @@ module.exports = {
                     res.status(400).send({ Error: 'Reservation not found.' });
                 } else {
                     res.status(200).send({ 
-                        Message: 'Reservation edited succesfully.',
+                        Message: 'Reservation edited successfully.',
                         Reservation: reservation
                     });
                 }
@@ -131,8 +131,8 @@ module.exports = {
                 if (reservation === null) {
                     res.status(400).send({ Error: 'Reservation not found.' });
                 } else {
-                    Reservation.delete().then(() => {
-                        res.status(200).send({ Message: 'Reservation has been removed succesfully.' });
+                    reservation.delete().then(() => {
+                        res.status(200).send({ Message: 'Reservation has been removed successfully.' });
                     }).catch(next);
                 }
             }).catch(next);

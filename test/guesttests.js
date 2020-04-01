@@ -22,7 +22,7 @@ describe('Guest CRUD functions', () => {
         guest.name = null;
         chai.request(server)
             .post('/api/guest')
-            .set('content-type', 'application/x-www-form-urlencoded')
+            .set('content-type', 'application/json')
             .send(guest)
             .end((err, res) => {
                 should.exist(res.body);
@@ -38,7 +38,7 @@ describe('Guest CRUD functions', () => {
         guest.name = 'testGuest';
         chai.request(server)
             .post('/api/guest')
-            .set('content-type', 'application/x-www-form-urlencoded')
+            .set('content-type', 'application/json')
             .send(guest)
             .end((err, res) => {
                 should.exist(res.body);
@@ -57,7 +57,7 @@ describe('Guest CRUD functions', () => {
     it('should not try to edit a guest with incorrect id', (done) => {
         chai.request(server)
             .put('/api/guest/000000000000000000000000')
-            .set('content-type', 'application/x-www-form-urlencoded')
+            .set('content-type', 'application/json')
             .send(guest)
             .end((err, res) => {
                 should.exist(res.body);
@@ -72,7 +72,7 @@ describe('Guest CRUD functions', () => {
         guest.name = 'editedGuest';
         chai.request(server)
             .put('/api/guest/' + guestId)
-            .set('content-type', 'application/x-www-form-urlencoded')
+            .set('content-type', 'application/json')
             .send(guest)
             .end((err, res) => {
                 should.exist(res.body);
@@ -87,7 +87,7 @@ describe('Guest CRUD functions', () => {
     it('should not try to delete a guest with incorrect id', (done) => {
         chai.request(server)
             .delete('/api/guest/000000000000000000000000')
-            .set('content-type', 'application/x-www-form-urlencoded')
+            .set('content-type', 'application/json')
             .send(guest)
             .end((err, res) => {
                 should.exist(res.body);
@@ -101,7 +101,7 @@ describe('Guest CRUD functions', () => {
     it('should delete a guest', (done) => {
         chai.request(server)
             .delete('/api/guest/' + guestId)
-            .set('content-type', 'application/x-www-form-urlencoded')
+            .set('content-type', 'application/json')
             .send(guest)
             .end((err, res) => {
                 should.exist(res.body);
