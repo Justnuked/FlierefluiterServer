@@ -16,7 +16,7 @@ let guest = {
 };
 
 describe('Guest CRUD functions', () => {
-    it('should not create a guest without giving a name');
+    // it('should not create a guest without giving a name');
 
     //Other tests...
 });
