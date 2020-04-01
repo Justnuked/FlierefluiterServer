@@ -21,6 +21,7 @@ let customer = {
 let customerId = '';
 
 describe('Customer CRUD functions', () => {
+
     it('should not create a new customer without name', (done) => {
         customer.name = null;
         chai.request(server)
@@ -105,7 +106,6 @@ describe('Customer CRUD functions', () => {
         chai.request(server)
             .delete('/api/customer/' + customerId)
             .set('content-type', 'application/x-www-form-urlencoded')
-            .send({})
             .end((err, res) => {
                 should.exist(res.body);
                 res.should.have.status(200);
