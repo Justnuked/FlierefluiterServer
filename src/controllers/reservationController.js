@@ -1,3 +1,4 @@
+const utils = require('../config/utils');
 const Reservation = require('../models/reservationModel');
 const Customer = require('../models/customerModel');
 const Guest = require('../models/guestModel');
@@ -69,9 +70,26 @@ module.exports = {
             if (err) {
                 res.status(500).send(err);
             }
-            //Return fetched data
+            //Check fetched data
             else {
-                res.status(200).send(data);
+                //Hateoas
+                if (data !== null) {
+                    var dataArray = [];
+
+                    data.forEach(reservation => {
+                        reservationData = reservation.toJSON();
+                        reservationData['links'] = {
+                            rel: 'self',
+                            href: 'http://localhost:3000/api/reservation/' + reservation._id
+                        };
+                        dataArray.push(reservationData);                   
+                    });
+                }
+
+                //Return data
+                res.status(200).send({
+                    data: dataArray
+                });
             }
         }).catch(next);
     },
@@ -83,12 +101,34 @@ module.exports = {
             if (err) {
                 res.status(500).send(err);
             }
-            //Return fetched data
+            //Check fetched data
             else {
                 if (data === null) {
                     res.status(400).send({ Error: 'Reservation not found.' });
                 } else {
-                    res.status(200).send(data);
+                    //Hateoas
+                    var linkArray = [];
+                    linkArray.push({
+                        rel: 'self',
+                        href: 'http://localhost:3000/api/reservation/' + data._id
+                    });
+                    linkArray.push({
+                        rel: 'customer',
+                        href: 'http://localhost:3000/api/customer/' + data.customer
+                    });
+                    if (data.guests !== null) {
+                        utils.addToArray(data.guests, linkArray, 'guest', 'read');
+                    }
+                    if (data.facilitiesrented !== null) {
+                        utils.addToArray(data.facilitiesrented, linkArray, 'facilitiesrented', 'read');
+                    }
+                    dataArray = data.toJSON();
+                    dataArray['links'] = linkArray;
+
+                    //Return the data
+                    res.status(200).send({
+                        data: dataArray
+                    });
                 }
             }
         }).catch(next);
