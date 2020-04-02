@@ -92,7 +92,6 @@ describe('Customer CRUD functions', () => {
         chai.request(server)
             .delete('/api/customer/000000000000000000000000')
             .set('content-type', 'application/json')
-            .send({})
             .end((err, res) => {
                 should.exist(res.body);
                 res.should.have.status(400);

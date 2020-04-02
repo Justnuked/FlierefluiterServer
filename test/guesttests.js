@@ -88,7 +88,6 @@ describe('Guest CRUD functions', () => {
         chai.request(server)
             .delete('/api/guest/000000000000000000000000')
             .set('content-type', 'application/json')
-            .send(guest)
             .end((err, res) => {
                 should.exist(res.body);
                 res.should.have.status(400);
@@ -102,7 +101,6 @@ describe('Guest CRUD functions', () => {
         chai.request(server)
             .delete('/api/guest/' + guestId)
             .set('content-type', 'application/json')
-            .send(guest)
             .end((err, res) => {
                 should.exist(res.body);
                 res.should.have.status(200);
