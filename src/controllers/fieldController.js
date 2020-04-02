@@ -1,3 +1,4 @@
+const utils = require('../config/utils');
 const Field = require('../models/fieldModel');
 
 module.exports = {
@@ -7,13 +8,11 @@ module.exports = {
 
         Field.findOne({ name: req.body.name }, function (err, data) {
             //If server error
-            if (err)
-            {
+            if (err) {
                 res.status(500).send(err);
             }
             //Customer doesn't exist yet.
-            if (data === null)
-            {
+            if (data === null) {
                 let field = new Field({
                     name: req.body.name,
                     type: req.body.type,
@@ -35,8 +34,7 @@ module.exports = {
                             Field: field
                         });
                     }).catch(next);
-            } else
-            {
+            } else {
                 res.status(400).send({ Error: 'Field already exists.' });
             }
         }).catch(next);
@@ -47,14 +45,28 @@ module.exports = {
 
         Field.find({}, function (err, data) {
             //If server error
-            if (err)
-            {
+            if (err) {
                 res.status(500).send(err);
             }
             //Return fetched data
-            else
-            {
-                res.status(200).send(data);
+            else {
+                if (data !== null) {
+                    //Hateoas
+                    var dataArray = [];
+
+                    data.forEach(field => {
+                        fieldJson = field.toJSON();
+                        fieldJson['links'] = [
+                            {
+                                rel: 'self',
+                                href: `${utils.url}/field/` + field.name
+                            }
+                        ];
+                        dataArray.push(fieldJson);
+                    });
+                }
+
+                res.status(200).send({ data: dataArray });
             }
         }).catch(next);
     },
@@ -63,15 +75,27 @@ module.exports = {
     getById(req, res, next) {
         Field.findOne({ name: req.params.name }, function (err, data) {
             //If server error
-            if (err)
-            {
+            if (err) {
                 res.status(500).send(err);
             }
             //Return fetched data
-            //TODO: Maybe custom JSON object to show extra data like guests, rentedfacilities, etc.
-            else
-            {
-                res.status(200).send(data);
+            else {
+                if (data === null) {
+                    res.status(400).send({ Error: 'Field not found.' });
+                } else {
+
+                    //Hateoas
+                    dataJson = data.toJSON();
+                    var links = [
+                        {
+                            rel: 'self',
+                            href: `${utils.url}/field/${data.name}`
+                        }
+                    ];
+                    dataJson['links'] = links;
+                    
+                    res.status(200).send({ data: dataJson });
+                }
             }
         }).catch(next);
     },
@@ -96,13 +120,11 @@ module.exports = {
             })
             .then((field) => {
                 //Check if retrieved field exists.
-                if (field === null)
-                {
+                if (field === null) {
                     res.status(400).send({ Error: 'Field does not exist.' });
                 }
                 //Else confirm update and show new data
-                else
-                {
+                else {
                     res.status(200).send({
                         Message: 'Field edited successfully.',
                         Field: field
@@ -116,11 +138,9 @@ module.exports = {
 
         Field.findOne({ name: req.params.name })
             .then((field) => {
-                if (field === null)
-                {
+                if (field === null) {
                     res.status(400).send({ Error: 'Field does not exist.' });
-                } else
-                {
+                } else {
                     field.delete()
                         .then(() => {
                             res.status(200).send({ Message: 'Field has been removed successfully.' });
