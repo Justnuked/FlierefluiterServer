@@ -29,7 +29,7 @@ function addToArray(loopArray, addArray, endpoint) {
     for (let i = 0; i < loopArray.length; i++) {
         addArray.push({
             rel: `${endpoint}`,
-            href: `url/${endpoint}/` + loopArray[i]
+            href: `${url}/${endpoint}/` + loopArray[i]
         });
     }
     return addArray;
