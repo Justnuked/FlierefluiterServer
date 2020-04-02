@@ -45,9 +45,23 @@ module.exports = {
             if (err) {
                 res.status(500).send(err);
             }
-            //Return fetched data
+            //Check fetched data
             else {
-                res.status(200).send(data);
+                //Hateoas
+                if (data !== null) {
+                    var dataArray = [];
+
+                    data.forEach(customer => {
+                        customerData = customer.toJSON();
+                        customerData['links'] = {
+                            rel: 'self',
+                            href: 'http://localhost:3000/api/customer/' + customer._id
+                        };
+                        dataArray.push(customerData);
+                    });
+                }
+                //Return data
+                res.status(200).send({ data: dataArray });
             }
         }).catch(next);
     },
@@ -60,13 +74,21 @@ module.exports = {
             if (err) {
                 res.status(500).send(err);
             }
-            //Return fetched data
-            //TODO: Maybe custom JSON object to show extra data like guests, rentedfacilities, etc.
+            //Check fetched data
             else {
                 if (data === null) {
                     res.status(400).send({ Error: "Customer not found." });
                 } else {
-                    res.status(200).send(data);
+                    //Hateoas
+                    var links = {
+                        rel: 'self',
+                        href: 'http://localhost:3000/api/customer/' + data._id
+                    };
+                    dataJson = data.toJSON();
+                    dataJson['links'] = links;
+
+                    //Return data
+                    res.status(200).send({ data: dataJson });
                 }
             }
         }).catch(next);
