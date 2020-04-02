@@ -43,10 +43,12 @@ module.exports = {
 
                     data.forEach(guest => {
                         guestJson = guest.toJSON();
-                        guestJson['links'] = {
-                            rel: 'self',
-                            href: `${utils.url}/guest/` + guest._id
-                        };
+                        guestJson['links'] = [
+                            {
+                                rel: 'self',
+                                href: `${utils.url}/guest/` + guest._id
+                            }
+                        ];
                         dataArray.push(guestJson);
                     });
                 }
@@ -70,10 +72,12 @@ module.exports = {
                     res.status(400).send({ Error: 'Guest not found.' });
                 } else {
                     //Hateoas
-                    var links = {
-                        rel: 'self',
-                        href: `${utils.url}/guest/` + data._id
-                    };
+                    var links = [
+                        {
+                            rel: 'self',
+                            href: `${utils.url}/guest/` + data._id
+                        }
+                    ];
                     dataJson = data.toJSON();
                     dataJson['links'] = links;
                     res.status(200).send({ data: dataJson });

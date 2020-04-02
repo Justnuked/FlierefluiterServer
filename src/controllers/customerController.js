@@ -54,10 +54,12 @@ module.exports = {
 
                     data.forEach(customer => {
                         customerData = customer.toJSON();
-                        customerData['links'] = {
-                            rel: 'self',
-                            href: `${utils.url}/customer/` + customer._id
-                        };
+                        customerData['links'] = [
+                            {
+                                rel: 'self',
+                                href: `${utils.url}/customer/` + customer._id
+                            }
+                        ];
                         dataArray.push(customerData);
                     });
                 }
@@ -81,10 +83,12 @@ module.exports = {
                     res.status(400).send({ Error: "Customer not found." });
                 } else {
                     //Hateoas
-                    var links = {
-                        rel: 'self',
-                        href: `${utils.url}/customer/` + data._id
-                    };
+                    var links = [
+                        {
+                            rel: 'self',
+                            href: `${utils.url}/customer/` + data._id
+                        }
+                    ];
                     dataJson = data.toJSON();
                     dataJson['links'] = links;
 

@@ -78,10 +78,22 @@ module.exports = {
 
                     data.forEach(reservation => {
                         reservationData = reservation.toJSON();
-                        reservationData['links'] = {
-                            rel: 'self',
-                            href: `${utils.url}/reservation/` + reservation._id
-                        };
+                        reservationData['links'] = [
+                            {
+                                rel: 'self',
+                                href: `${utils.url}/reservation/` + reservation._id
+                            },
+                            {
+                                rel: 'customer',
+                                href: `${utils.url}/customer/` + reservation.customer
+                            }
+                        ];
+                        if (reservation.guests !== null) {
+                            utils.addToArray(reservation.guests, reservationData['links'], 'guests');
+                        }
+                        if (reservation.facilitiesrented !== null) {
+                            utils.addToArray(reservation.facilitiesrented, reservationData['links'], 'facilitiesrented');
+                        }
                         dataArray.push(reservationData);                   
                     });
                 }
