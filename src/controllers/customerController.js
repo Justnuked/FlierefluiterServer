@@ -1,3 +1,4 @@
+const utils = require('../config/utils');
 const Customer = require('../models/customerModel');
 
 module.exports = {
@@ -55,7 +56,7 @@ module.exports = {
                         customerData = customer.toJSON();
                         customerData['links'] = {
                             rel: 'self',
-                            href: 'http://localhost:3000/api/customer/' + customer._id
+                            href: `${utils.url}/customer/` + customer._id
                         };
                         dataArray.push(customerData);
                     });
@@ -82,7 +83,7 @@ module.exports = {
                     //Hateoas
                     var links = {
                         rel: 'self',
-                        href: 'http://localhost:3000/api/customer/' + data._id
+                        href: `${utils.url}/customer/` + data._id
                     };
                     dataJson = data.toJSON();
                     dataJson['links'] = links;

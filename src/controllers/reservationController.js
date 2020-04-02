@@ -80,7 +80,7 @@ module.exports = {
                         reservationData = reservation.toJSON();
                         reservationData['links'] = {
                             rel: 'self',
-                            href: 'http://localhost:3000/api/reservation/' + reservation._id
+                            href: `${utils.url}/reservation/` + reservation._id
                         };
                         dataArray.push(reservationData);                   
                     });
@@ -110,17 +110,17 @@ module.exports = {
                     var linkArray = [];
                     linkArray.push({
                         rel: 'self',
-                        href: 'http://localhost:3000/api/reservation/' + data._id
+                        href: `${utils.url}/reservation/` + data._id
                     });
                     linkArray.push({
                         rel: 'customer',
-                        href: 'http://localhost:3000/api/customer/' + data.customer
+                        href: `${utils.url}/customer/` + data.customer
                     });
                     if (data.guests !== null) {
-                        utils.addToArray(data.guests, linkArray, 'guest', 'read');
+                        utils.addToArray(data.guests, linkArray, 'guest');
                     }
                     if (data.facilitiesrented !== null) {
-                        utils.addToArray(data.facilitiesrented, linkArray, 'facilitiesrented', 'read');
+                        utils.addToArray(data.facilitiesrented, linkArray, 'facilitiesrented');
                     }
                     dataArray = data.toJSON();
                     dataArray['links'] = linkArray;
