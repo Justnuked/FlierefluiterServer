@@ -5,8 +5,6 @@ const server = require('../index');
 chai.use(chaiHttp);
 var should = require('chai').should();
 
-const Customer = require('../src/models/customerModel');
-
 require('./customertests');
 require('./guesttests');
 

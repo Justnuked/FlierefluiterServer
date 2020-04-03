@@ -1,18 +1,22 @@
 const utils = require('../config/utils');
 const Customer = require('../models/customerModel');
+const utils = require('../config/utils');
+const ROLES = require('../config/roles').ROLES;
 
 module.exports = {
 
     //Create a new customer
     create(req, res, next) {
 
-        Customer.findOne({idnumber: req.body.idnumber}, function(err, data) {
+        Customer.findOne({ idnumber: req.body.idnumber }, function (err, data) {
             //If server error
-            if (err) {
+            if (err)
+            {
                 res.status(500).send(err);
             }
             //Customer doesn't exist yet.
-            if (data === null) {
+            if (data === null)
+            {
                 let customer = new Customer({
                     name: req.body.name,
                     address: req.body.address,
@@ -32,7 +36,8 @@ module.exports = {
                             Customer: result
                         });
                     }).catch(next);
-            } else {
+            } else
+            {
                 res.status(400).send({ Error: 'Customer already exists.' });
             }
         }).catch(next);
@@ -41,9 +46,11 @@ module.exports = {
     //Get all customers
     get(req, res, next) {
 
-        Customer.find({}, function(err, data) {
+
+        Customer.find({}, function (err, data) {
             //If server error
-            if (err) {
+            if (err)
+            {
                 res.status(500).send(err);
             }
             //Check fetched data
@@ -69,12 +76,34 @@ module.exports = {
         }).catch(next);
     },
 
+    getCustomerThatIsLoggedIn(req, res, next) {
+        const username = req.user.username;
+        console.log(req.user.username);
+        const role = req.user.role;
+
+        if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Reception, ROLES.Admin, ROLES.GroundsKeeper, ROLES.Customer))
+        {
+            Customer.findOne({ username: username }, function (err, data) {
+                //If server error
+                if (err)
+                {
+                    res.status(500).send(err);
+                }
+                //Return fetched data
+                else
+                {
+                    res.status(200).send(data);
+                }
+            }).catch(next);
+        }
+    },
+
     //Get customer by id
     getById(req, res, next) {
-        
-        Customer.findById({ _id: req.params.id }, function(err, data) {
+        Customer.findById({ _id: req.params.id }, function (err, data) {
             //If server error
-            if (err) {
+            if (err)
+            {
                 res.status(500).send(err);
             }
             //Check fetched data
@@ -103,7 +132,7 @@ module.exports = {
     update(req, res, next) {
 
         Customer.findByIdAndUpdate(
-            { _id: req.params.id }, 
+            { _id: req.params.id },
             {
                 name: req.body.name,
                 address: req.body.address,
@@ -121,14 +150,16 @@ module.exports = {
             })
             .then((customer) => {
                 //Check if retrieved customer exists.
-                if (customer === null) {
+                if (customer === null)
+                {
                     res.status(400).send({ Error: 'Customer does not exist.' });
                 }
                 //Else confirm update and show new data
-                else {
-                    res.status(200).send({ 
+                else
+                {
+                    res.status(200).send({
                         Message: 'Customer edited successfully.',
-                        Customer: customer 
+                        Customer: customer
                     });
                 }
             }).catch(next);
@@ -139,14 +170,16 @@ module.exports = {
 
         Customer.findById({ _id: req.params.id })
             .then((customer) => {
-                if (customer === null) {
+                if (customer === null)
+                {
                     res.status(400).send({ Error: 'Customer does not exist.' });
-                } else {
+                } else
+                {
                     customer.delete()
                         .then(() => {
-                            res.status(200).send({ Message :'Customer has been removed successfully.' });
+                            res.status(200).send({ Message: 'Customer has been removed successfully.' });
                         }).catch(next);
-                    
+
                 }
             }).catch(next);
     }
