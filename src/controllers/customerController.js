@@ -1,6 +1,5 @@
 const utils = require('../config/utils');
 const Customer = require('../models/customerModel');
-const utils = require('../config/utils');
 const ROLES = require('../config/roles').ROLES;
 
 module.exports = {
