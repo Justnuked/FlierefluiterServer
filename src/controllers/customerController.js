@@ -1,11 +1,13 @@
+const utils = require('../config/utils');
 const Customer = require('../models/customerModel');
+const ROLES = require('../config/roles').ROLES;
 
 module.exports = {
 
     //Create a new customer
     create(req, res, next) {
 
-        Customer.findOne({idnumber: req.body.idnumber}, function(err, data) {
+        Customer.findOne({ idnumber: req.body.idnumber }, function (err, data) {
             //If server error
             if (err) {
                 res.status(500).send(err);
@@ -40,33 +42,75 @@ module.exports = {
     //Get all customers
     get(req, res, next) {
 
-        Customer.find({}, function(err, data) {
+        Customer.find({}, function (err, data) {
             //If server error
             if (err) {
                 res.status(500).send(err);
             }
-            //Return fetched data
+            //Check fetched data
             else {
-                res.status(200).send(data);
+                //Hateoas
+                if (data !== null) {
+                    var dataArray = [];
+
+                    data.forEach(customer => {
+                        customerData = customer.toJSON();
+                        customerData['links'] = [
+                            {
+                                rel: 'self',
+                                href: `${utils.url}/customer/` + customer._id
+                            }
+                        ];
+                        dataArray.push(customerData);
+                    });
+                }
+                //Return data
+                res.status(200).send({ data: dataArray });
             }
         }).catch(next);
     },
 
+    getCustomerThatIsLoggedIn(req, res, next) {
+        const username = req.user.username;
+
+        if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Reception, ROLES.Admin, ROLES.GroundsKeeper, ROLES.Customer)) {
+            Customer.findOne({ username: username }, function (err, data) {
+                //If server error
+                if (err) {
+                    res.status(500).send(err);
+                }
+                //Return fetched data
+                else {
+                    res.status(200).send(data);
+                }
+            }).catch(next);
+        }
+    },
+
     //Get customer by id
     getById(req, res, next) {
-        
-        Customer.findById({ _id: req.params.id }, function(err, data) {
+        Customer.findById({ _id: req.params.id }, function (err, data) {
             //If server error
             if (err) {
                 res.status(500).send(err);
             }
-            //Return fetched data
-            //TODO: Maybe custom JSON object to show extra data like guests, rentedfacilities, etc.
+            //Check fetched data
             else {
                 if (data === null) {
                     res.status(400).send({ Error: "Customer not found." });
                 } else {
-                    res.status(200).send(data);
+                    //Hateoas
+                    var links = [
+                        {
+                            rel: 'self',
+                            href: `${utils.url}/customer/` + data._id
+                        }
+                    ];
+                    dataJson = data.toJSON();
+                    dataJson['links'] = links;
+
+                    //Return data
+                    res.status(200).send({ data: dataJson });
                 }
             }
         }).catch(next);
@@ -76,7 +120,7 @@ module.exports = {
     update(req, res, next) {
 
         Customer.findByIdAndUpdate(
-            { _id: req.params.id }, 
+            { _id: req.params.id },
             {
                 name: req.body.name,
                 address: req.body.address,
@@ -99,9 +143,9 @@ module.exports = {
                 }
                 //Else confirm update and show new data
                 else {
-                    res.status(200).send({ 
+                    res.status(200).send({
                         Message: 'Customer edited successfully.',
-                        Customer: customer 
+                        Customer: customer
                     });
                 }
             }).catch(next);
@@ -117,9 +161,9 @@ module.exports = {
                 } else {
                     customer.delete()
                         .then(() => {
-                            res.status(200).send({ Message :'Customer has been removed successfully.' });
+                            res.status(200).send({ Message: 'Customer has been removed successfully.' });
                         }).catch(next);
-                    
+
                 }
             }).catch(next);
     }

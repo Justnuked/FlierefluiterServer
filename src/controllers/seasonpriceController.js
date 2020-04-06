@@ -1,3 +1,4 @@
+const utils = require('../config/utils');
 const SeasonPrice = require('../models/seasonPriceModel');
 
 module.exports = {
@@ -29,7 +30,23 @@ module.exports = {
             }
             //Return fetched data
             else {
-                res.status(200).send(data);
+                if (data !== null) {
+                    //Hateoas
+                    var dataArray = [];
+
+                    data.forEach(seasonPrice => {
+                        seasonPriceJson = seasonPrice.toJSON();
+                        seasonPriceJson['links'] = [
+                            {
+                                rel: 'self',
+                                href: `${utils.url}/seasonprice/` + seasonPrice._id
+                            }
+                        ];
+                        dataArray.push(seasonPriceJson);
+                    });
+                }
+
+                res.status(200).send({ data: dataArray });
             }
         }).catch(next);
     },
@@ -46,7 +63,17 @@ module.exports = {
                 if (data === null) {
                     res.status(400).send({ Error: 'SeasonPrice not found.'});
                 } else {
-                    res.status(200).send(data);
+                    //Hateoas
+                    dataJson = data.toJSON();
+                    var links = [
+                        {
+                            rel: 'self',
+                            href: `${utils.url}/seasonprice/${data._id}`
+                        }
+                    ];
+                    dataJson['links'] = links;
+                    
+                    res.status(200).send({ data: dataJson });
                 }
             }
         }).catch(next);

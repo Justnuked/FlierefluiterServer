@@ -18,17 +18,52 @@ const Spot = require ('../controllers/spotController.js')
 
 
 //Customer routes
-routes.get('/customer', Customer.get);
-routes.get('/customer/:id', Customer.getById);
+routes.get('/customer', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Admin, ROLES.Reception, ROLES.GroundsKeeper))
+    {
+        return Customer.get(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
+
 routes.post('/customer', Customer.create);
-routes.put('/customer/:id', Customer.update);
-routes.delete('/customer/:id', Customer.delete);
+
+routes.put('/customer/:id', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Admin, ROLES.Reception, ROLES.GroundsKeeper))
+    {
+        return Customer.update(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
+
+routes.delete('/customer/:id', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Admin, ROLES.Reception, ROLES.GroundsKeeper))
+    {
+        return Customer.delete(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
 
 //Guest routes
 routes.get('/guest', passport.authenticate('jwt', { session: false }), function (req, res, next) {
 
     //check if the user is in role. . .
-    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Customer))
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Reception, ROLES.Admin, ROLES.GroundsKeeper))
     {
         return Guest.get(req, res, next);
     }
@@ -39,32 +74,266 @@ routes.get('/guest', passport.authenticate('jwt', { session: false }), function 
     }
 });
 
-routes.get('/guest/:id', Guest.getById);
-routes.post('/guest', Guest.create);
-routes.put('/guest/:id', Guest.update);
-routes.delete('/guest/:id', Guest.delete);
+routes.get('/guest/:id', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Reception, ROLES.Admin, ROLES.GroundsKeeper))
+    {
+        return Guest.getById(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
+routes.post('/guest', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Customer, ROLES.Reception, ROLES.Admin, ROLES.GroundsKeeper))
+    {
+        return Guest.create(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
+
+routes.put('/guest/:id', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Reception, ROLES.Admin, ROLES.GroundsKeeper))
+    {
+        return Guest.update(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
+
+
+routes.delete('/guest/:id', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Reception, ROLES.Admin, ROLES.GroundsKeeper))
+    {
+        return Guest.delete(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
 
 //Field routes
-routes.get('/field', Field.get);
-routes.get('/field/:name', Field.getById);
-routes.post('/field', Field.create);
-routes.put('/field/:name', Field.update);
-routes.delete('/field/:name', Field.delete);
+routes.get('/field', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Customer, ROLES.Reception, ROLES.Admin, ROLES.GroundsKeeper))
+    {
+        return Field.get(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
+
+routes.get('/field/:name', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Customer, ROLES.Reception, ROLES.Admin, ROLES.GroundsKeeper))
+    {
+        return Field.getById(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
+routes.post('/field', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Admin, ROLES.GroundsKeeper))
+    {
+        return Field.create(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
+
+routes.put('/field/:name', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Admin, ROLES.GroundsKeeper))
+    {
+        return Field.update(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
+routes.delete('/field/:name', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Admin, ROLES.GroundsKeeper))
+    {
+        return Field.delete(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
 
 //Reservation routes
-routes.get('/reservation', Reservation.get);
-routes.get('/reservation/:id', Reservation.getById);
-routes.post('/reservation', Reservation.create);
-routes.put('/reservation/:id', Reservation.update);
-routes.delete('/reservation/:id', Reservation.delete);
+routes.get('/reservation', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Customer, ROLES.Reception, ROLES.Admin, ROLES.GroundsKeeper))
+    {
+        return Reservation.get(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
+routes.get('/reservation/:id', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Customer, ROLES.Reception, ROLES.Admin, ROLES.GroundsKeeper))
+    {
+        return Reservation.getById(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
+
+routes.post('/reservation', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Customer, ROLES.Reception, ROLES.Admin, ROLES.GroundsKeeper))
+    {
+        return Reservation.create(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
+routes.put('/reservation/:id', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Customer, ROLES.Reception, ROLES.Admin, ROLES.GroundsKeeper))
+    {
+        return Reservation.update(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
+routes.delete('/reservation/:id', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Customer, ROLES.Reception, ROLES.Admin, ROLES.GroundsKeeper))
+    {
+        return Reservation.delete(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
 
 
 //Facility routes
-routes.get('/facility', Facility.get);
-routes.get('/facility/:id', Facility.getById);
-routes.post('/facility', Facility.create);
-routes.put('/facility/:id', Facility.update);
-routes.delete('/facility/:id', Facility.delete);
+routes.get('/facility', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Customer, ROLES.Reception, ROLES.Admin, ROLES.GroundsKeeper))
+    {
+        return Facility.get(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
+routes.get('/facility/:id', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Customer, ROLES.Reception, ROLES.Admin, ROLES.GroundsKeeper))
+    {
+        return Facility.getById(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
+routes.post('/facility', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Admin, ROLES.GroundsKeeper))
+    {
+        return Facility.create(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
+routes.put('/facility/:id', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Admin, ROLES.GroundsKeeper))
+    {
+        return Facility.update(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
+routes.delete('/facility/:id', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Admin, ROLES.GroundsKeeper))
+    {
+        return Facility.delete(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
 
 //user routes
 routes.delete('/user/:name', User.deleteUser);
@@ -74,18 +343,114 @@ routes.post('/register', User.createCustomer);
 
 
 //SeasonPrice routes
-routes.get('/seasonprice', SeasonPrice.get);
-routes.get('/seasonprice/:id', SeasonPrice.getById);
-routes.post('/seasonprice', SeasonPrice.create);
-routes.put('/seasonprice/:id', SeasonPrice.update);
-routes.delete('/seasonprice/:id', SeasonPrice.delete);
+routes.get('/seasonprice', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Customer, ROLES.Reception, ROLES.Admin, ROLES.GroundsKeeper))
+    {
+        return SeasonPrice.get(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
+routes.get('/seasonprice/:id', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Customer, ROLES.Reception, ROLES.Admin, ROLES.GroundsKeeper))
+    {
+        return SeasonPrice.getById(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
+routes.post('/seasonprice', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Admin, ROLES.GroundsKeeper))
+    {
+        return SeasonPrice.update(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
+routes.put('/seasonprice/:id', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Admin, ROLES.GroundsKeeper))
+    {
+        return SeasonPrice.update(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
+routes.delete('/seasonprice/:id', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Admin, ROLES.GroundsKeeper))
+    {
+        return SeasonPrice.delete(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
 
 //Bill routes
 routes.get('/bill', Bill.get);
 routes.get('/bill/:id', Bill.getById);
-routes.post('/bill', Bill.create);
-routes.put('/bill/:id', Bill.update);
-routes.delete('/bill/:id', Bill.delete);
+routes.post('/bill', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Reception, ROLES.Admin, ROLES.GroundsKeeper))
+    {
+        return Bill.create(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
+routes.put('/bill/:id', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Reception, ROLES.Admin, ROLES.GroundsKeeper))
+    {
+        return Bill.update(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
+routes.delete('/bill/:id', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Admin, ROLES.GroundsKeeper))
+    {
+        return Bill.delete(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
 
 //Spot Routes
 routes.get('/spot', Spot.get);
@@ -95,10 +460,70 @@ routes.put('/spot/:id', Spot.update);
 routes.delete('/spot/:id', Spot.delete);
 
 //FacilitiesRented routes
-routes.get('/facilitiesrented', FacilitiesRented.get);
-routes.get('/facilitiesrented/:id', FacilitiesRented.getById);
-routes.post('/facilitiesrented', FacilitiesRented.create);
-routes.put('/facilitiesrented/:id', FacilitiesRented.update);
-routes.delete('/facilitiesrented/:id', FacilitiesRented.delete);
+routes.get('/facilitiesrented', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Reception, ROLES.Customer, ROLES.Admin, ROLES.GroundsKeeper))
+    {
+        return FacilitiesRented.get(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
+routes.get('/facilitiesrented/:id', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Reception, ROLES.Customer, ROLES.Admin, ROLES.GroundsKeeper))
+    {
+        return FacilitiesRented.getById(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
+routes.post('/facilitiesrented', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Reception, ROLES.Customer, ROLES.Admin, ROLES.GroundsKeeper))
+    {
+        return FacilitiesRented.create(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
+routes.put('/facilitiesrented/:id', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Reception, ROLES.Customer, ROLES.Admin, ROLES.GroundsKeeper))
+    {
+        return FacilitiesRented.update(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
+routes.delete('/facilitiesrented/:id', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
+    //check if the user is in role. . .
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Reception, ROLES.Customer, ROLES.Admin, ROLES.GroundsKeeper))
+    {
+        return FacilitiesRented.delete(req, res, next);
+    }
+    else
+    {
+        return res.json({ Message: "You dont have the required role to access this resource" });
+
+    }
+});
 
 module.exports = routes;

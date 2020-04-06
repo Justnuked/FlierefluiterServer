@@ -20,7 +20,6 @@ module.exports = {
                         console.log(err);
                     } else
                     {
-                        console.log(user + 'user at signing');
                         jwt.sign({ username: user.username, role: user.role }, process.env.jwt, { expiresIn: "1d" }, function (err, token) {
                             res.status(200);
 
@@ -74,8 +73,6 @@ module.exports = {
         const password = req.body.password;
         const role = ROLES.ROLES.Customer;
 
-        console.log(role);
-
         User.findOne({ username: username })
             .then((result) => {
                 if (result === null)
@@ -99,7 +96,6 @@ module.exports = {
         const username = req.user.username;
         const password = req.body.password;
 
-        console.log(username + ' username from delete');
         User.findOne({ username: username })
             .then((result) => {
                 if (result !== null)
