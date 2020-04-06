@@ -11,7 +11,8 @@ const ReservationSchema = new Schema({
         required: true
     },
     areas: [{
-        type: String
+        type: Schema.Types.ObjectId,
+        ref: 'spot'
     }],
     customer: {
         type: Schema.Types.ObjectId,

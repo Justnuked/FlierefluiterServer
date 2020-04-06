@@ -14,6 +14,7 @@ const SeasonPrice = require('../controllers/seasonpriceController.js');
 const Bill = require('../controllers/billController.js');
 const FacilitiesRented = require('../controllers/facilitiesrentedController.js');
 const User = require('../controllers/usercontroller');
+const Spot = require ('../controllers/spotController.js')
 
 
 //Customer routes
@@ -85,6 +86,13 @@ routes.get('/bill/:id', Bill.getById);
 routes.post('/bill', Bill.create);
 routes.put('/bill/:id', Bill.update);
 routes.delete('/bill/:id', Bill.delete);
+
+//Spot Routes
+routes.get('/spot', Spot.get);
+routes.get('/spot/:id', Spot.getById);
+routes.post('/spot', Spot.create);
+routes.put('/spot/:id', Spot.update);
+routes.delete('/spot/:id', Spot.delete);
 
 //FacilitiesRented routes
 routes.get('/facilitiesrented', FacilitiesRented.get);
