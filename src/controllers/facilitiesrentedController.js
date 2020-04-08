@@ -1,3 +1,4 @@
+const utils = require('../config/utils');
 const FacilitiesRented = require('../models/facilitiesRentedModel');
 
 module.exports = {
@@ -26,9 +27,28 @@ module.exports = {
             if (err) {
                 res.status(500).send(err);
             }
-            //Return fetched data
+            //Check fetched data
             else {
-                res.status(200).send(data);
+                if (data !== null) {
+                    //Hateoas
+                    var dataArray = [];
+
+                    data.forEach(facilitiesRented => {
+                        rentedJson = facilitiesRented.toJSON();
+                        rentedJson['links'] = [
+                            {
+                                rel: 'self',
+                                href: `${utils.url}/facilitiesrented/` + facilitiesRented._id
+                            },
+                            {
+                                rel: 'facility',
+                                href: `${utils.url}/facility/` + facilitiesRented.facility
+                            }
+                        ];
+                        dataArray.push(rentedJson);
+                    });
+                }
+                res.status(200).send({ data: dataArray });
             }
         }).catch(next);
     },
@@ -40,10 +60,26 @@ module.exports = {
             if (err) {
                 res.status(500).send(err);
             } else {
+                //Check fetched data
                 if (data === null) {
                     res.status(400).send({ Error: 'FacilitiesRented not found.' });
                 } else {
-                    res.status(200).send(data);
+                    //Hateoas
+                    dataJson = data.toJSON();
+                    var links = [
+                        {
+                            rel: 'self',
+                            href: `${utils.url}/facilitiesrented/` + data._id
+                        }, 
+                        {
+                            rel: 'facility',
+                            href: `${utils.url}/facility/` + data.facility
+                        }
+                    ];
+                    dataJson['links'] = links
+
+                    //Return data
+                    res.status(200).send({ data: dataJson });
                 }
             }
         }).catch(next);

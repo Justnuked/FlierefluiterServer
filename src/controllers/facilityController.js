@@ -1,3 +1,4 @@
+const utils = require('../config/utils');
 const Facility = require('../models/facilityModel');
 
 module.exports = {
@@ -7,13 +8,11 @@ module.exports = {
 
         Facility.findOne({ name: req.body.name }, function (err, data) {
             //If server error
-            if (err)
-            {
+            if (err) {
                 res.status(500).send(err);
             }
             //Facility doesn't exist yet
-            if (data === null)
-            {
+            if (data === null) {
                 let facility = new Facility({
                     name: req.body.name,
                     description: req.body.description,
@@ -28,8 +27,7 @@ module.exports = {
                         Facility: result
                     });
                 }).catch(next);
-            } else
-            {
+            } else {
                 res.status(400).send({ Error: 'Facility already exists.' });
             }
         }).catch(next);
@@ -40,12 +38,25 @@ module.exports = {
 
         Facility.find({}, function (err, data) {
             //If server error
-            if (err)
-            {
+            if (err) {
                 res.status(500).send(err);
-            } else
-            { //Return data
-                res.status(200).send(data);
+            } else { //Return data
+                if (data !== null) {
+                    //Hateoas
+                    var dataArray = [];
+
+                    data.forEach(facility => {
+                        facilityJson = facility.toJSON();
+                        facilityJson['links'] = [
+                            {
+                                rel: 'self',
+                                href: `${utils.url}/facility/` + facility._id
+                            }
+                        ];
+                        dataArray.push(facilityJson);
+                    });
+                }
+                res.status(200).send({ data: dataArray });
             }
         }).catch(next);
     },
@@ -55,17 +66,23 @@ module.exports = {
 
         Facility.findById({ _id: req.params.id }, function (err, data) {
             //If server error
-            if (err)
-            {
+            if (err) {
                 res.status(500).send(err);
-            } else
-            {
-                if (data === null)
-                {
+            } else {
+                if (data === null) {
                     res.status(400).send({ Error: 'Facility not found.' });
-                } else
-                {
-                    res.status(200).send(data);
+                } else {
+                    //Hateoas
+                    dataJson = data.toJSON();
+                    var links = [
+                        {
+                            rel: 'self',
+                            href: `${utils.url}/facility/` + data._id
+                        }
+                    ];
+                    dataJson['links'] = links;
+
+                    res.status(200).send({ data: dataJson });
                 }
             }
         }).catch(next);
@@ -85,11 +102,9 @@ module.exports = {
             },
             { new: true }
         ).then((facility) => {
-            if (facility === null)
-            {
+            if (facility === null) {
                 res.status(400).send({ Error: 'Facility not found.' });
-            } else
-            {
+            } else {
                 res.status(200).send({
                     Message: 'Facility edited successfully.',
                     facility: facility
@@ -102,11 +117,9 @@ module.exports = {
     delete(req, res, next) {
 
         Facility.findById({ _id: req.params.id }).then((facility) => {
-            if (facility === null)
-            {
+            if (facility === null) {
                 res.status(400).send({ Error: 'Facility not found.' });
-            } else
-            {
+            } else {
                 facility.delete().then(() => {
                     res.status(200).send({ Message: 'Facility has been removed successfully.' });
                 }).catch(next);

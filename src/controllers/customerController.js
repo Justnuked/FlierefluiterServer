@@ -1,5 +1,5 @@
-const Customer = require('../models/customerModel');
 const utils = require('../config/utils');
+const Customer = require('../models/customerModel');
 const ROLES = require('../config/roles').ROLES;
 
 module.exports = {
@@ -36,18 +36,33 @@ module.exports = {
             {
                 res.status(500).send(err);
             }
-            //Return fetched data
+            //Check fetched data
             else
             {
-                res.status(200).send(data);
+                //Hateoas
+                if (data !== null)
+                {
+                    var dataArray = [];
+
+                    data.forEach(customer => {
+                        customerData = customer.toJSON();
+                        customerData['links'] = [
+                            {
+                                rel: 'self',
+                                href: `${utils.url}/customer/` + customer._id
+                            }
+                        ];
+                        dataArray.push(customerData);
+                    });
+                }
+                //Return data
+                res.status(200).send({ data: dataArray });
             }
         }).catch(next);
     },
 
     getCustomerThatIsLoggedIn(req, res, next) {
         const username = req.user.username;
-        console.log(req.user.username);
-        const role = req.user.role;
 
         if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Reception, ROLES.Admin, ROLES.GroundsKeeper, ROLES.Customer))
         {
@@ -74,8 +89,7 @@ module.exports = {
             {
                 res.status(500).send(err);
             }
-            //Return fetched data
-            //TODO: Maybe custom JSON object to show extra data like guests, rentedfacilities, etc.
+            //Check fetched data
             else
             {
                 if (data === null)
@@ -83,10 +97,18 @@ module.exports = {
                     res.status(400).send({ Error: "Customer not found." });
                 } else
                 {
-                    if (data.user == req.user._id)
-                    {
-                        res.status(200).send(data);
-                    }
+                    //Hateoas
+                    var links = [
+                        {
+                            rel: 'self',
+                            href: `${utils.url}/customer/` + data._id
+                        }
+                    ];
+                    dataJson = data.toJSON();
+                    dataJson['links'] = links;
+
+                    //Return data
+                    res.status(200).send({ data: dataJson });
                 }
             }
         }).catch(next);

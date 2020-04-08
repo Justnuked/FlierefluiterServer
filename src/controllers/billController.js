@@ -1,3 +1,4 @@
+const utils = require('../config/utils');
 const Bill = require('../models/billModel');
 
 module.exports = {
@@ -20,53 +21,85 @@ module.exports = {
             }).catch(next);
     },
 
-        //Get all bills
-        get(req, res, next) {
+    //Get all bills
+    get(req, res, next) {
 
-            Bill.find({}, function(err, data) {
-                if (err) {
-                    res.status(500).send(err);
+        Bill.find({}, function(err, data) {
+            if (err) {
+                res.status(500).send(err);
+            } else {
+                if (data !== null) {
+                    //Hateoas
+                    var dataArray = [];
+
+                    data.forEach(bill => {
+                        billJson = bill.toJSON();
+                        billJson['links'] = [
+                            {
+                                rel: 'self',
+                                href: `${utils.url}/bill/` + bill._id
+                            },
+                            {
+                                rel: 'facility',
+                                href: `${utils.url}/reservation/` + bill.reservation
+                            }
+                        ];
+                        dataArray.push(billJson);
+                    });
                 }
-                else {
-                    res.status(200).send(data);
+
+                res.status(200).send({ data: dataArray });
+            }
+        }).catch(next);
+    },
+
+    getById(req, res, next) {
+
+        Bill.findById({ _id: req.params.id }, function(err, data) {
+            if (err) {
+                res.status(500).send(err);
+            } else {
+                if (data === null) {
+                    res.status(400).send({ Error: 'Bill not found.' });
+                } else {
+                    //Hateoas
+                    dataJson = data.toJSON();
+                    var links = [
+                        {
+                            rel: 'self',
+                            href: `${utils.url}/bill/${data._id}`
+                        },
+                        {
+                            rel: 'reservation',
+                            href: `${utils.url}/bill/${data.reservation}`
+                        }
+                    ];
+                    dataJson['links'] = links;
+
+                    res.status(200).send({ data: dataJson });
+                }
+            }
+        }).catch(next);
+    },
+
+    delete(req, res, next) {
+
+        Bill.findById({ _id: req.params.id })
+            .then((bill) => {
+                if (bill === null) {
+                    res.status(400).send({ Error: 'Bill does not exist.' });
+                } else {
+                    bill.delete()
+                        .then(() => {
+                            res.status(200).send({ Message :'Bill has been removed successfully.' });
+                        }).catch(next);
+                    
                 }
             }).catch(next);
-        },
+    },
 
-        getById(req, res, next) {
-
-            Bill.findById({ _id: req.params.id }, function(err, data) {
-                if (err) {
-                    res.status(500).send(err);
-                }
-                else {
-                    if (data === null) {
-                        res.status(400).send({ Error: 'Bill not found.' });
-                    } else {
-                        res.status(200).send(data);
-                    }
-                }
-            }).catch(next);
-        },
-
-        delete(req, res, next) {
-
-            Bill.findById({ _id: req.params.id })
-                .then((bill) => {
-                    if (bill === null) {
-                        res.status(400).send({ Error: 'Bill does not exist.' });
-                    } else {
-                        bill.delete()
-                            .then(() => {
-                                res.status(200).send({ Message :'Bill has been removed successfully.' });
-                            }).catch(next);
-                        
-                    }
-                }).catch(next);
-        },
-        
-        // Updates a bill
-        update(req, res, next) {
+    // Updates a bill
+    update(req, res, next) {
 
         Bill.findByIdAndUpdate(
             { _id: req.params.id }, 
