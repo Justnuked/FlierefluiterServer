@@ -34,6 +34,9 @@ const CustomerSchema = new Schema({
     },
     idcardorpassport: {
         type: String
+    },
+    user: {
+        type: String
     }
 });
 

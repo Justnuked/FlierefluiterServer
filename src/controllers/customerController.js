@@ -6,46 +6,30 @@ module.exports = {
 
     //Create a new customer
     create(req, res, next) {
-
-        Customer.findOne({ idnumber: req.body.idnumber }, function (err, data) {
-            //If server error
-            if (err)
-            {
-                res.status(500).send(err);
-            }
-            //Customer doesn't exist yet.
-            if (data === null)
-            {
-                let customer = new Customer({
-                    name: req.body.name,
-                    address: req.body.address,
-                    zipcode: req.body.zipcode,
-                    city: req.body.city,
-                    country: req.body.country,
-                    phone: req.body.phone,
-                    email: req.body.email,
-                    dateofbirth: req.body.dateofbirth,
-                    idnumber: req.body.idnumber,
-                    idcardorpassport: req.body.idcardorpassport
+        let customer = new Customer({
+            name: req.body.name,
+            address: req.body.address,
+            zipcode: req.body.zipcode,
+            city: req.body.city,
+            country: req.body.country,
+            phone: req.body.phone,
+            email: req.body.email,
+            dateofbirth: req.body.dateofbirth,
+            idnumber: req.body.idnumber,
+            idcardorpassport: req.body.idcardorpassport,
+            user: req.body.userId
+        });
+        customer.save()
+            .then((result) => {
+                res.status(200).send({
+                    Message: "Customer created succesfully.",
+                    Customer: result
                 });
-                customer.save()
-                    .then((result) => {
-                        res.status(200).send({
-                            Message: "Customer created succesfully.",
-                            Customer: result
-                        });
-                    }).catch(next);
-            } else
-            {
-                res.status(400).send({ Error: 'Customer already exists.' });
-            }
-        }).catch(next);
+            }).catch(next);
     },
 
     //Get all customers
     get(req, res, next) {
-
-
         Customer.find({}, function (err, data) {
             //If server error
             if (err)
@@ -99,7 +83,10 @@ module.exports = {
                     res.status(400).send({ Error: "Customer not found." });
                 } else
                 {
-                    res.status(200).send(data);
+                    if (data.user == req.user._id)
+                    {
+                        res.status(200).send(data);
+                    }
                 }
             }
         }).catch(next);

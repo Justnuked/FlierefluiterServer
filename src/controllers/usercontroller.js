@@ -20,7 +20,7 @@ module.exports = {
                         console.log(err);
                     } else
                     {
-                        jwt.sign({ username: user.username, role: user.role }, process.env.jwt, { expiresIn: "1d" }, function (err, token) {
+                        jwt.sign({ username: user.username, role: user.role, ID: user._id }, process.env.jwt, { expiresIn: "1d" }, function (err, token) {
                             res.status(200);
 
                             var temp = -1;
@@ -80,9 +80,9 @@ module.exports = {
                     var user = new User({ username: username, password: password, role: role });
 
                     user.save()
-                        .then(() => {
+                        .then((result) => {
                             res.status(200);
-                            res.send({ Message: 'user created' });
+                            res.send({ Message: 'user created', resultId: result._id });
                         })
                 } else
                 {

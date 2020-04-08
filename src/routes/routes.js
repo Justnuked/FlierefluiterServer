@@ -18,6 +18,7 @@ const User = require('../controllers/usercontroller');
 
 //Customer routes
 routes.get('/customer', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
     //check if the user is in role. . .
     if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Admin, ROLES.Reception, ROLES.GroundsKeeper))
     {
@@ -33,8 +34,9 @@ routes.get('/customer', passport.authenticate('jwt', { session: false }), functi
 routes.post('/customer', Customer.create);
 
 routes.put('/customer/:id', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+
     //check if the user is in role. . .
-    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Admin, ROLES.Reception, ROLES.GroundsKeeper))
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Admin, ROLES.Reception, ROLES.GroundsKeeper, ROLES.Customer))
     {
         return Customer.update(req, res, next);
     }

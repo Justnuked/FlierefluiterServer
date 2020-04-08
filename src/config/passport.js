@@ -17,7 +17,7 @@ passport.use(new LocalStrat({
                     return cb(null, false, { Message: 'Incorrect credentials' });
                 } else
                 {
-                    return cb(null, { username: result.username, role: result.role });
+                    return cb(null, { username: result.username, role: result.role, ID: result._id });
                 }
             }).catch(err => cb(err));
     }
@@ -31,7 +31,7 @@ passport.use(new JWTStrategy({
 
         return User.findOne({ username: jwtPayload.username })
             .then(user => {
-                return cb(null, { username: user.username, role: user.role });
+                return cb(null, { username: user.username, role: user.role, ID: user._id });
             })
             .catch(err => {
                 return cb(err);
