@@ -6,14 +6,15 @@ module.exports = {
 
     //Create a new customer
     create(req, res, next) {
-
         Customer.findOne({ email: req.body.email }, function (err, data) {
             //If server error
-            if (err) {
+            if (err)
+            {
                 res.status(500).send(err);
             }
             //Customer doesn't exist yet.
-            if (data === null) {
+            if (data === null)
+            {
                 let customer = new Customer({
                     name: req.body.name,
                     address: req.body.address,
@@ -24,7 +25,8 @@ module.exports = {
                     email: req.body.email,
                     dateofbirth: req.body.dateofbirth,
                     idnumber: req.body.idnumber,
-                    idcardorpassport: req.body.idcardorpassport
+                    idcardorpassport: req.body.idcardorpassport,
+                    user: req.body.user
                 });
                 customer.save()
                     .then((result) => {
@@ -33,7 +35,8 @@ module.exports = {
                             Customer: result
                         });
                     }).catch(next);
-            } else {
+            } else
+            {
                 res.status(400).send({ Error: 'Customer already exists.' });
             }
         }).catch(next);
@@ -41,16 +44,18 @@ module.exports = {
 
     //Get all customers
     get(req, res, next) {
-
         Customer.find({}, function (err, data) {
             //If server error
-            if (err) {
+            if (err)
+            {
                 res.status(500).send(err);
             }
             //Check fetched data
-            else {
+            else
+            {
                 //Hateoas
-                if (data !== null) {
+                if (data !== null)
+                {
                     var dataArray = [];
 
                     data.forEach(customer => {
@@ -71,16 +76,18 @@ module.exports = {
     },
 
     getCustomerThatIsLoggedIn(req, res, next) {
-        const username = req.user.username;
-
-        if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Reception, ROLES.Admin, ROLES.GroundsKeeper, ROLES.Customer)) {
-            Customer.findOne({ username: username }, function (err, data) {
+        const id = req.user.ID;
+        if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Reception, ROLES.Admin, ROLES.GroundsKeeper, ROLES.Customer))
+        {
+            Customer.findOne({ user: id }, function (err, data) {
                 //If server error
-                if (err) {
+                if (err)
+                {
                     res.status(500).send(err);
                 }
                 //Return fetched data
-                else {
+                else
+                {
                     res.status(200).send(data);
                 }
             }).catch(next);
@@ -91,14 +98,18 @@ module.exports = {
     getById(req, res, next) {
         Customer.findById({ _id: req.params.id }, function (err, data) {
             //If server error
-            if (err) {
+            if (err)
+            {
                 res.status(500).send(err);
             }
             //Check fetched data
-            else {
-                if (data === null) {
+            else
+            {
+                if (data === null)
+                {
                     res.status(400).send({ Error: "Customer not found." });
-                } else {
+                } else
+                {
                     //Hateoas
                     var links = [
                         {
@@ -110,7 +121,24 @@ module.exports = {
                     dataJson['links'] = links;
 
                     //Return data
-                    res.status(200).send({ data: dataJson });
+
+                    if (req.user.role == ROLES.Customer)
+                    {
+                        console.log(data._id);
+                        console.log(req.user.ID);
+                        if (data._id == req.user.ID)
+                        {
+                            res.status(200).send({ data: dataJson });
+                        } else
+                        {
+                            res.status(400).send({ Error: "This is not your data." });
+                        }
+                    }
+                    else
+                    {
+                        res.status(200).send({ data: dataJson });
+                    }
+
                 }
             }
         }).catch(next);
@@ -138,11 +166,13 @@ module.exports = {
             })
             .then((customer) => {
                 //Check if retrieved customer exists.
-                if (customer === null) {
+                if (customer === null)
+                {
                     res.status(400).send({ Error: 'Customer does not exist.' });
                 }
                 //Else confirm update and show new data
-                else {
+                else
+                {
                     res.status(200).send({
                         Message: 'Customer edited successfully.',
                         Customer: customer
@@ -156,9 +186,11 @@ module.exports = {
 
         Customer.findById({ _id: req.params.id })
             .then((customer) => {
-                if (customer === null) {
+                if (customer === null)
+                {
                     res.status(400).send({ Error: 'Customer does not exist.' });
-                } else {
+                } else
+                {
                     customer.delete()
                         .then(() => {
                             res.status(200).send({ Message: 'Customer has been removed successfully.' });
