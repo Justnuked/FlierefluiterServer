@@ -28,17 +28,14 @@ mongoose.set('useFindAndModify', false);
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useCreateIndex', true);
 mongoose.set('useUnifiedTopology', true);
-mongoose.connect('mongodb://localhost/flierefluiter');
+
+mongoose.connect('mongodb://admin:admin123@ds213759.mlab.com:13759/flierenfluiter').then(() => {
+	console.log('Connected to mlab.');
+}, (err) => {
+	console.log('error', err);
+});
 
 app.use(cors());
-
-//In case we want to move over to mlab.
-//mongoose.connect('mongodb://*mlab-url-here*').then(() => {
-//	console.log('Connected to mlab.');
-//}, (err) => {
-//	console.log('error', err);
-//});
-
 
 app.use('/api', routes);
 app.use('/api/field', passport.authenticate('jwt', { session: false }), routes);

@@ -117,6 +117,9 @@ module.exports = {
                 cable: req.body.cable,
                 priceperday: req.body.priceperday,
                 seasonprice: req.body.seasonprice
+            },
+            {
+                new: true
             })
             .then((field) => {
                 //Check if retrieved field exists.

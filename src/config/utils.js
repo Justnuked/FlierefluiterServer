@@ -1,9 +1,9 @@
 function checkIsInRole(user, ...roles) {
     {
-        console.log("CheckIsInRole");
+        //console.log("CheckIsInRole");
         if (!user)
         {
-            console.log("CheckIsInRole no user");
+            //console.log("CheckIsInRole no user");
             return false;
         }
 

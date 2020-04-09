@@ -7,7 +7,7 @@ module.exports = {
     //Create a new customer
     create(req, res, next) {
 
-        Customer.findOne({ idnumber: req.body.idnumber }, function (err, data) {
+        Customer.findOne({ email: req.body.email }, function (err, data) {
             //If server error
             if (err) {
                 res.status(500).send(err);
