@@ -62,11 +62,10 @@ module.exports = {
     },
 
     getCustomerThatIsLoggedIn(req, res, next) {
-        const username = req.user.username;
-
+        const id = req.user.ID;
         if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Reception, ROLES.Admin, ROLES.GroundsKeeper, ROLES.Customer))
         {
-            Customer.findOne({ username: username }, function (err, data) {
+            Customer.findOne({ user: id }, function (err, data) {
                 //If server error
                 if (err)
                 {
@@ -108,7 +107,24 @@ module.exports = {
                     dataJson['links'] = links;
 
                     //Return data
-                    res.status(200).send({ data: dataJson });
+
+                    if (req.user.role == ROLES.Customer)
+                    {
+                        console.log(data._id);
+                        console.log(req.user.ID);
+                        if (data._id == req.user.ID)
+                        {
+                            res.status(200).send({ data: dataJson });
+                        } else
+                        {
+                            res.status(400).send({ Error: "This is not your data." });
+                        }
+                    }
+                    else
+                    {
+                        res.status(200).send({ data: dataJson });
+                    }
+
                 }
             }
         }).catch(next);
