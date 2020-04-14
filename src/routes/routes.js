@@ -36,7 +36,7 @@ routes.get('/customer', passport.authenticate('jwt', { session: false }), functi
 routes.get('/current', passport.authenticate('jwt', { session: false }), function (req, res, next) {
 
     //check if the user is in role. . .
-    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Admin, ROLES.Reception, ROLES.GroundsKeeper))
+    if (utils.checkIsInRole(req.user, ROLES.Manager, ROLES.Admin, ROLES.Reception, ROLES.GroundsKeeper, ROLES.Customer))
     {
         return Customer.getCustomerThatIsLoggedIn(req, res, next);
     }
