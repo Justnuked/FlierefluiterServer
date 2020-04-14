@@ -14,7 +14,7 @@ const SeasonPrice = require('../controllers/seasonpriceController.js');
 const Bill = require('../controllers/billController.js');
 const FacilitiesRented = require('../controllers/facilitiesrentedController.js');
 const User = require('../controllers/usercontroller');
-const Spot = require ('../controllers/spotController.js')
+const Spot = require('../controllers/spotController.js')
 
 
 //Customer routes
@@ -368,6 +368,7 @@ routes.delete('/facility/:id', passport.authenticate('jwt', { session: false }),
 routes.delete('/user/:name', User.deleteUser);
 routes.post('/login', User.login);
 routes.post('/register', User.createCustomer);
+routes.post('/register/admin', User.createAdmin);
 
 
 
