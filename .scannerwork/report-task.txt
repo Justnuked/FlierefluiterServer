@@ -1,0 +1,6 @@
+projectKey=Flierefluiter
+serverUrl=http://sonarqube.avans-informatica-breda.nl
+serverVersion=7.4.0.18908
+dashboardUrl=http://sonarqube.avans-informatica-breda.nl/dashboard?id=Flierefluiter
+ceTaskId=AXF57n04TNm1xigl95kf
+ceTaskUrl=http://sonarqube.avans-informatica-breda.nl/api/ce/task?id=AXF57n04TNm1xigl95kf

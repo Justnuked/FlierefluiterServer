@@ -39,7 +39,7 @@ describe('Customer CRUD functions', () => {
         mongoose.connection
             .once('open', () => {
                 chai.request(server)
-                    .post('/api/register')
+                    .post('/api/register/admin')
                     .send(user)
                     .end(function (error, result) {
                         done();
@@ -55,7 +55,7 @@ describe('Customer CRUD functions', () => {
             .post('/api/login')
             .send(user)
             .end(function (error, result) {
-                token = "Bearer " + result.body.token;
+                token = "Bearer " + result.body.JWT;
                 done();
             });
     });
@@ -101,13 +101,13 @@ describe('Customer CRUD functions', () => {
 
     it('should edit a customer with a correct id given', (done) => {
         customer.name = "editedCustomer";
+
         chai.request(server)
             .put('/api/customer/' + customerId)
             .set('content-type', 'application/json')
             .set('Authorization', token)
             .send(customer)
             .end((err, res) => {
-                console.log(res);
                 should.exist(res.body);
                 res.should.have.status(200);
                 res.body.should.be.an('object');
@@ -121,6 +121,7 @@ describe('Customer CRUD functions', () => {
         chai.request(server)
             .put('/api/customer/000000000000000000000000')
             .set('content-type', 'application/json')
+            .set('Authorization', token)
             .send(customer)
             .end((err, res) => {
                 should.exist(res.body);
@@ -135,6 +136,7 @@ describe('Customer CRUD functions', () => {
         chai.request(server)
             .delete('/api/customer/000000000000000000000000')
             .set('content-type', 'application/json')
+            .set('Authorization', token)
             .end((err, res) => {
                 should.exist(res.body);
                 res.should.have.status(400);
@@ -148,6 +150,7 @@ describe('Customer CRUD functions', () => {
         chai.request(server)
             .delete('/api/customer/' + customerId)
             .set('content-type', 'application/json')
+            .set('Authorization', token)
             .end((err, res) => {
                 should.exist(res.body);
                 res.should.have.status(200);

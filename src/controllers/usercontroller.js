@@ -92,6 +92,30 @@ module.exports = {
             })
     },
 
+    createAdmin(req, res, next) {
+        const username = req.body.username;
+        const password = req.body.password;
+        const role = ROLES.ROLES.Admin;
+
+        User.findOne({ username: username })
+            .then((result) => {
+                if (result === null)
+                {
+                    var user = new User({ username: username, password: password, role: role });
+
+                    user.save()
+                        .then((result) => {
+                            res.status(200);
+                            res.send({ Message: 'user created', resultId: result._id });
+                        })
+                } else
+                {
+                    res.status(422);
+                    res.send({ Message: 'username is taken' });
+                }
+            })
+    },
+
     deleteUser(req, res, next) {
         const username = req.user.username;
         const password = req.body.password;
